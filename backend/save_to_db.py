@@ -1,14 +1,11 @@
 
-def save_news(supabase, data):
+def save_to_table(supabase, data, table):
     response = (
-        supabase.table("news")
-        .insert(data)
+        supabase.table(table)
+        .upsert(data)
         .execute()
     )
 
-def save_reddit(supabase, data):
-    response = (
-        supabase.table("reddit")
-        .insert(data)
-        .execute()
-    )
+
+    
+

@@ -1,6 +1,8 @@
-from transformers import pipeline
+from backend.scraping import get_news, get_reddit
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-from scrapping import get_news
+from transformers import pipeline
+
+
 def finbert_pipeline(pipe, news):
     for article in news:
         text = f"{article['headline']} {article['summary']}"
@@ -11,17 +13,20 @@ def finbert_pipeline(pipe, news):
     return news
 
 
-def enrich_posts(analyzer, posts):
+def vader_pipeline(analyzer, posts):
     for post in posts:
         text = f"{post['title']} {post['body']}"
-        score = analyzer.polarity_scores(text)
-        post["vader_sentiment"] = score["compound"]
+        vs = analyzer.polarity_scores(text)
+        post["vader_sentiment"] = vs["compound"]
 
     return posts
 
 if __name__=="__main__":
     pipe = pipeline("text-classification", model="ProsusAI/finbert")
     print(finbert_pipeline(pipe, get_news("AAPL"))[0])
+    analyzer = SentimentIntensityAnalyzer()
+    print(vader_pipeline(analyzer, get_reddit("AAPL", 1))[0])
+
 
 
 
