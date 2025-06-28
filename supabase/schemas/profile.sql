@@ -16,8 +16,9 @@ comment on table price is 'Table to store price data';
 create table news (
     id TEXT primary key, -- news ID
     timestamp TEXT, -- time of news
-    title TEXT 
-
+    title TEXT,
+    indicator TEXT,
+    score DOUBLE PRECISION,
 );
 comment on table news is 'Table to store news data';
 
@@ -27,7 +28,10 @@ create table reddit (
     timestamp TEXT, -- time of stock price
     subreddit TEXT,
     title TEXT,
-    body TEXT
+    body TEXT,
+    indicator TEXT,
+    score DOUBLE PRECISION
+    
 
 );
 comment on table reddit is 'Table to store reddit data';
