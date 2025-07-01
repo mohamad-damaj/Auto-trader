@@ -11,4 +11,6 @@ def client():
     return create_client(url, key)
 
 
+if __name__ == "__main__":
+    client2 = client()
 

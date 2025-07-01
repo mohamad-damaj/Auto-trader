@@ -15,12 +15,12 @@ logging.basicConfig(
     format="%(asctime)s — %(levelname)s — %(message)s"
 )
 
-def run_cron_job(ticker="AAPL", hours_back=1):
+def run_cron_job(date_from, date_to, days= "7d", intervals = "1h", ticker="AAPL", hours_back=1):
     logging.info(f"Starting cron job for {ticker}")
     
     try:
         pipe = pipeline("text-classification", model="ProsusAI/finbert")
-        raw_news = get_news(ticker)
+        raw_news = get_news(ticker, date_from, date_to)
         if raw_news:
             news_data = finbert_pipeline(pipe, raw_news)
             save_to_table(supabase, news_data, "news")
@@ -43,7 +43,7 @@ def run_cron_job(ticker="AAPL", hours_back=1):
         logging.error(f"Error in reddit processing: {e}")
     
     try:
-        prices = get_prices(ticker)
+        prices = get_prices(ticker, days=days, interval=intervals)
         if prices:
             save_to_table(supabase, prices, "price")
             logging.info("Saved latest price data")
@@ -55,4 +55,4 @@ def run_cron_job(ticker="AAPL", hours_back=1):
     logging.info(f"Cron job for {ticker} completed successfully\n")
 
 if __name__ == "__main__":
-    run_cron_job("AAPL", hours_back=1)
+    run_cron_job(date_from="2025-06-29", date_to="2025-07-01", days= "7d", intervals = "1h", ticker="AAPL", hours_back=2160)

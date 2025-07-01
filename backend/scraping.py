@@ -20,15 +20,16 @@ def get_reddit(ticker, time_prev):
         user_agent=User_Agent
     )
     
-    keywords = ["apple", "aapl", "$aapl", "iphone", "tim cook"]
+    keywords = ["apple", "aapl", "$aapl", "iphone", "tim cook", "trump", "google", "amazon", "facebook", "money", "crash", "recession", "war",
+                "palantir", "TSLA", "$TSLA"]
 
     target_subs = ["stocks", "wallstreetbets", "investing", "StockMarket", "technology", "finance", "business", "news"]
-    one_hour_ago = datetime.now() - timedelta(hours = time_prev)
+    time_ago = datetime.now() - timedelta(hours = time_prev)
     
     posts = []
 
     for sub in target_subs:
-        for submission in reddit.subreddit(sub).new(limit=50):
+        for submission in reddit.subreddit(sub).new(limit=50000):
             created_utc = datetime.fromtimestamp(submission.created_utc)
             if True:
                 if any(kw in submission.title.lower() or kw in submission.selftext.lower() for kw in keywords):
@@ -43,21 +44,39 @@ def get_reddit(ticker, time_prev):
     return posts
 
 
-def get_news(ticker):
-    url = f"https://finnhub.io/api/v1/company-news?symbol={ticker}&from=2025-06-18&to=2025-06-19&token={finkey}"
+def get_news(ticker, date_from, date_to):
+    all_data = []
+
+    # Company news
+    url = f"https://finnhub.io/api/v1/company-news?symbol={ticker}&from={date_from}&to={date_to}&token={finkey}"
     response = requests.get(url)
     data = response.json()
 
-    return [{
-    "id": item["id"],
-    "datetime": item["datetime"],
-    "headline": item["headline"],
-    "summary": item["summary"],
+    all_data += [{
+        "id": item["id"],
+        "datetime": item["datetime"],
+        "headline": item["headline"],
+        "summary": item["summary"],
     } for item in data]
 
-def get_prices(TICKER):
+    categories = ["general", "forex", "crypto", "merger"]
+    for category in categories:
+        url = f"https://finnhub.io/api/v1/news?category={category}&token={finkey}"
+        response = requests.get(url)
+        data = response.json()
+
+        all_data += [{
+            "id": item["id"],
+            "datetime": item["datetime"],
+            "headline": item["headline"],
+            "summary": item["summary"],
+        } for item in data]
+
+    return all_data
+
+def get_prices(TICKER, days, interval):
     ticker = yf.Ticker(TICKER)
-    df = ticker.history(period="7d", interval="1m")
+    df = ticker.history(period=days, interval=interval)
     df = df.reset_index().rename(columns={
     "Datetime": "timestamp",  
     "Open": "open_price",
@@ -76,8 +95,8 @@ def get_prices(TICKER):
 
 if __name__=="__main__":
     news = get_news("AAPL")
-    prices = get_prices("AAPL")
+    prices = get_prices("AAPL", "2025-04-01", "2025-06-19")
     reddit = get_reddit("AAPL", 1)
-    print(prices)
+    print(news)
 
 
