@@ -7,7 +7,8 @@
         close_price DOUBLE PRECISION,
         volume BIGINT,
         dividends DOUBLE PRECISION,
-        stock_splits DOUBLE PRECISION
+        stock_splits DOUBLE PRECISION,
+        prediction BIGINT
 
     );
     comment on table price is 'Table to store price data';
