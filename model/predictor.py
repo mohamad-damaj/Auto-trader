@@ -134,8 +134,7 @@ class RealTimePredictor:
         price_df  = self._fetch_price(start, end)
         news_df   = self._fetch_news(start, end)
         reddit_df = self._fetch_reddit(start, end)
-        print("Below is the df")
-        print(price_df)
+
 
         df = price_df.join(news_df,   how="left") \
                      .join(reddit_df, how="left")
@@ -177,7 +176,7 @@ if __name__ == "__main__":
     scaler_path = r"model\scaler.pkl"
     predictor = RealTimePredictor(dburl,
                  model_path,
-                 scaler_path, lookback_hours=24)
+                 scaler_path, lookback_hours=48)
     result = predictor.predict_next()
     
     print(f"prediction is:", result["pred"])
