@@ -1,12 +1,12 @@
 import logging
-from backend.scraping import get_news, get_prices, get_reddit
-from backend.save_to_db import save_to_table
+from .backend.scraping import get_news, get_prices, get_reddit
+from .backend.save_to_db import save_to_table
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from transformers import pipeline
-from backend.sentiment import finbert_pipeline, vader_pipeline
-from utils.supabase.client import client
+from .backend.sentiment import finbert_pipeline, vader_pipeline
+from .utils.supabase.client import client
 
-supabase = client()
+
 
 
 logging.basicConfig(
@@ -15,7 +15,7 @@ logging.basicConfig(
     format="%(asctime)s — %(levelname)s — %(message)s"
 )
 
-def run_cron_job(date_from, date_to, days= "7d", intervals = "1h", ticker="AAPL", hours_back=1):
+def run_cron_job(supabase, date_from, date_to, days= "7d", intervals = "1h", ticker="AAPL", hours_back=1):
     logging.info(f"Starting cron job for {ticker}")
     
     try:
