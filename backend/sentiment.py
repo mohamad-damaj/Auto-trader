@@ -1,4 +1,4 @@
-from backend.scraping import get_news, get_reddit
+from .scraping import get_news, get_reddit
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from transformers import pipeline
 

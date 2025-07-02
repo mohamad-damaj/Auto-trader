@@ -76,7 +76,7 @@ def get_news(ticker, date_from, date_to):
 
 def get_prices(TICKER, days, interval):
     ticker = yf.Ticker(TICKER)
-    df = ticker.history(period=days, interval=interval)
+    df = ticker.history(period=days, interval=interval, prepost=True)
     df = df.reset_index().rename(columns={
     "Datetime": "timestamp",  
     "Open": "open_price",
@@ -94,9 +94,9 @@ def get_prices(TICKER, days, interval):
 
 
 if __name__=="__main__":
-    news = get_news("AAPL")
-    prices = get_prices("AAPL", "2025-04-01", "2025-06-19")
-    reddit = get_reddit("AAPL", 1)
-    print(news)
+    # news = get_news("AAPL")
+    prices = get_prices("AAPL", days="7d", interval="1h")
+    # reddit = get_reddit("AAPL", 1)
+    print(prices)
 
 
