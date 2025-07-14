@@ -85,7 +85,7 @@ class RealTimePredictor:
             .groupby("datetime")["score"]
             .mean()
             .to_frame()
-            .resample("1H")
+            .resample("1h")
             .mean()
             .rename(columns={"score": "news_sentiment"})
         )

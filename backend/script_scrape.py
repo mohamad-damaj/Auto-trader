@@ -1,10 +1,10 @@
 import logging
-from .backend.scraping import get_news, get_prices, get_reddit
-from .backend.save_to_db import save_to_table
+from .scraping import get_news, get_prices, get_reddit
+from .save_to_db import save_to_table
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from transformers import pipeline
-from .backend.sentiment import finbert_pipeline, vader_pipeline
-from .utils.supabase.client import client
+from .sentiment import finbert_pipeline, vader_pipeline
+from ..utils.supabase.client import client
 
 
 
